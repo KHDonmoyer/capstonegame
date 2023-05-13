@@ -1,6 +1,8 @@
 let character = document.getElementById("character");
 let block = document.getElementById("block");
-let counter=0;
+let counter = 0;
+let highScore = localStorage.getItem("highScore") || 0;
+
 function jump(){
     if(character.classList == "animate"){return}
     character.classList.add("animate");
@@ -14,7 +16,7 @@ let checkDead = setInterval(function() {
     if(blockLeft<20 && blockLeft>-20 && characterTop>=130){
         block.style.animation = "none";
         alert("Game Over. score: "+Math.floor(counter/100));
-        counter=0;
+       
         block.style.animation = "block 1s infinite linear";
     }else{
         counter++;
