@@ -18,7 +18,18 @@ let obstacleContainer = document.getElementById("obstacle-container");
 // Start the game
 function startGame() {
   // Move the character up
-  
+  document.addEventListener("keydown", function(event) {
+    if (event.code === "Space") {
+        console.log("spacebar pressed");
+      jump();
+    }
+  });
+  function jump() {
+    if (character.classList.contains("jump")) return; // prevent double jumping
+    character.classList.add("jump");
+    character.ySpeed = -10; // set the initial upward speed of the jump
+  }
+    
       
 
   // Start obstacle generation
