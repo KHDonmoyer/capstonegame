@@ -18,46 +18,8 @@ let obstacleContainer = document.getElementById("obstacle-container");
 // Start the game
 function startGame() {
   // Move the character up
-  function addKeyEventListeners() {
-    document.addEventListener("keydown", function(event) {
-        if (event.code === "Space") {
-          jump();
-        }
-      });
-      
-      }
-      function jump() {
-        if (character.classList.contains("animate")) {
-          return;
-        }
-        
-        character.classList.add("animate");
-        
-        let startPosition = character.offsetTop;
-        let jumpHeight = 100;
-        let duration = 500;
-        let startTime = null;
-        
-        function animateJump(currentTime) {
-          if (startTime === null) {
-            startTime = currentTime;
-          }
-          let elapsedTime = currentTime - startTime;
-          let fraction = Math.min(elapsedTime / duration, 1);
-          let jumpPosition = startPosition + (jumpHeight * fraction) - (10 * fraction * fraction);
-          character.style.top = jumpPosition + "px";
-          
-          if (fraction < 1) {
-            requestAnimationFrame(animateJump);
-          } else {
-            character.classList.remove("animate");
-          }
-        }
-        
-        requestAnimationFrame(animateJump);
-      }
-      
   
+      
 
   // Start obstacle generation
   obstacleInterval = setInterval(function() {
