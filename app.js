@@ -23,7 +23,7 @@ function startGame() {
       if (event.code === "ArrowUp" && !isJumping) {
         isJumping = true;
         jump();
-   
+      }
     });
   }
   
