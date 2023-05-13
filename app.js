@@ -1,93 +1,80 @@
-// Get a reference to the score display element
-const scoreDisplay = document.getElementById('score-display');
-
-// Set the initial score
+// Define game variables
 let score = 0;
-let timeAlive = 0;
+let highScore = 0;
+let obstacleInterval;
+let obstacleSpeed = 5;
+let isJumping = false;
+let isSliding = false;
+let characterTop = 0;
+let characterLeft = 50;
+let gameContainer = document.getElementById("game-container");
+let scoreDisplay = document.getElementById("score-display");
+let highScoreDisplay = document.getElementById("high-score-display");
+let character = document.getElementById("character");
+let ground = document.getElementById("ground");
+let obstacleContainer = document.getElementById("obstacle-container");
 
-// Define the game loop
-function gameLoop() {
 
-  // Check if the game is in the playing state
-  if (gameState === 'playing') {
 
-    // Increment the current frame
-    currentFrame++;
-    
-  // Increase the time alive by the time elapsed since the last frame
-  timeAlive += deltaTime;
-
-  // Update the score based on the time alive
-  score = Math.floor(timeAlive / 1000); // Increase score every second
-  scoreDisplay.textContent = `Score: ${score}`;
-
-    // Update the character's horizontal and vertical positions
-    characterX += characterVX;
-    characterY += characterVY;
-
-    // Apply gravity to the character's vertical velocity
-    characterVY += 1;
-
-    // Check if the character is on the ground
-    if (characterY >= 0) {
-      characterY = 0;
-      characterVY = 0;
+// Start the game
+function startGame() {
+  // Move the character up and down
+  document.addEventListener("keydown", function(event) {
+    if (event.code === "ArrowUp" && !isJumping) {
+      isJumping = true;
+      character.classList.add("jump");
+      setTimeout(function() {
+        character.classList.remove("jump");
+        isJumping = false;
+      }, 500);
     }
-
-    // Update the character's position on the screen
-    character.style.left = characterX + 'px';
-    character.style.bottom = characterY + 'px';
-
-    // Check if it's time to spawn a new obstacle
-    if (currentFrame % obstacleSpawnRate === 0) {
-      spawnObstacle();
+    if (event.code === "ArrowDown" && !isSliding) {
+      isSliding = true;
+      character.classList.add("slide");
+      setTimeout(function() {
+        character.classList.remove("slide");
+        isSliding = false;
+      }, 500);
     }
+  });
 
-    // Move each obstacle to the left
-    const obstacles = obstacleContainer.querySelectorAll('.obstacle');
-    obstacles.forEach(function(obstacle) {
-      obstacleX = parseInt(obstacle.style.left);
-      obstacleX -= obstacleSpeed;
-      obstacle.style.left = obstacleX + 'px';
-    });
+  // Start obstacle generation
+  obstacleInterval = setInterval(function() {
+    let obstacle = document.createElement("div");
+    obstacle.classList.add("obstacle");
+    obstacle.style.left = gameContainer.offsetWidth + "px";
+    obstacle.style.bottom = ground.offsetHeight + "px";
+    obstacleContainer.appendChild(obstacle);
 
-    // Remove obstacles that have gone off the screen
-    obstacles.forEach(function(obstacle) {
-      if (obstacleX < -obstacle.offsetWidth) {
+    // Move obstacle from right to left
+    let obstacleMoveInterval = setInterval(function() {
+      if (obstacle.offsetLeft < -obstacle.offsetWidth) {
+        clearInterval(obstacleMoveInterval);
         obstacle.remove();
-
-        // Increment the score for each obstacle cleared
-        score++;
-        scoreDisplay.innerHTML = 'Score: ' + score;
+      } else if (
+        obstacle.offsetLeft < character.offsetLeft + character.offsetWidth &&
+        obstacle.offsetLeft + obstacle.offsetWidth > character.offsetLeft &&
+        obstacle.offsetTop + obstacle.offsetHeight > character.offsetTop
+      ) {
+        clearInterval(obstacleMoveInterval);
+        clearInterval(obstacleInterval);
+        alert("Game over!");
+        if (score > highScore) {
+          highScore = score;
+          localStorage.setItem("highScore", highScore);
+          highScoreDisplay.innerHTML = "High Score: " + highScore;
+        }
+      } else {
+        obstacle.style.left = obstacle.offsetLeft - obstacleSpeed + "px";
       }
-    });
+    }, 10);
+  }, 2000);
 
-    // Check for collisions between the character and obstacles
-    obstacles.forEach(function(obstacle) {
-      const obstacleRect = obstacle.getBoundingClientRect();
-      const characterRect = character.getBoundingClientRect();
-
-      if (obstacleRect.bottom > characterRect.top &&
-          obstacleRect.top < characterRect.bottom &&
-          obstacleRect.right > characterRect.left &&
-          obstacleRect.left < characterRect.right) {
-        gameState = 'game over';
-
-        // Show the game over screen
-        const gameOverScreen = document.getElementById('game-over-screen');
-        gameOverScreen.style.display = 'block';
-      }
-    });
-
-    // Scroll the screen to match the character's position
-    const scrollX = characterX - 200;
-    const scrollY = -characterY + 200;
-    gameContainer.style.transform = 'translate(' + scrollX + 'px, ' + scrollY + 'px)';
-  }
-
-  // Call the game loop again on the next frame
-  requestAnimationFrame(gameLoop);
+  // Increase score every second
+  setInterval(function() {
+    score++;
+    scoreDisplay.innerHTML = "Score: " + score;
+  }, 1000);
 }
 
-// Start the game loop
-gameLoop();
+startGame();
