@@ -3,6 +3,7 @@ const scoreDisplay = document.getElementById('score-display');
 
 // Set the initial score
 let score = 0;
+let timeAlive = 0;
 
 // Define the game loop
 function gameLoop() {
@@ -12,6 +13,13 @@ function gameLoop() {
 
     // Increment the current frame
     currentFrame++;
+    
+  // Increase the time alive by the time elapsed since the last frame
+  timeAlive += deltaTime;
+
+  // Update the score based on the time alive
+  score = Math.floor(timeAlive / 1000); // Increase score every second
+  scoreDisplay.textContent = `Score: ${score}`;
 
     // Update the character's horizontal and vertical positions
     characterX += characterVX;
