@@ -1,16 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <Title>Mighty Slime</Title>
-    <link rel="stylesheet" href="style.css">
+  <title>Run Jump Slide</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game">
-        <div id="slime"></div>
-        <div id="pit"></div>
-        <div id="wall"></div>
-</div>
+    <h1>Run Jump Slide</h1>
+    <p>
+In this game the objective is simple, as the character runs across the screen jump with the up arrow key, and slide with the down arrow keys to avoid obstacles and make it as far as you can! 
+    </p>
+  <div id="game-container">
+    <div id="score-display">Score: 0</div>
+    <div id="character"></div>
+    <div id="ground"></div>
+    <div id="obstacle-container"></div>
+  </div>
+  <script src="script.js"></script>
 </body>
-<script src="app.js"></script>
 </html>
