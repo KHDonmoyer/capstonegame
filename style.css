@@ -28,14 +28,18 @@ p{
   }
   
   #character {
-    position: absolute;
+    position:absolute;
   bottom: 0;
 
   width: 50px;
   height: 80px;
   background-color: blue;
   }
-  
+  .animate{
+    animation: jump 0.3s linear;
+}
+
+
   #ground {
     position: absolute;
     left: 0;
