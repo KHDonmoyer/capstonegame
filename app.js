@@ -4,7 +4,6 @@ let highScore = 0;
 let obstacleInterval;
 let obstacleSpeed = 5;
 let isJumping = false;
-let isSliding = false;
 let characterTop = 0;
 let characterLeft = 50;
 let gameContainer = document.getElementById("game-container");
@@ -28,14 +27,7 @@ function startGame() {
         isJumping = false;
       }, 500);
     }
-    if (event.code === "ArrowDown" && !isSliding) {
-      isSliding = true;
-      character.classList.add("slide");
-      setTimeout(function() {
-        character.classList.remove("slide");
-        isSliding = false;
-      }, 500);
-    }
+    
   });
 
   // Start obstacle generation
@@ -68,13 +60,25 @@ function startGame() {
         obstacle.style.left = obstacle.offsetLeft - obstacleSpeed + "px";
       }
     }, 10);
-  }, 2000);
+  // Adjust obstacle interval based on screen speed and score
+  let obstacleGenerationInterval = 2000 - score * 100 - gameContainer.scrollLeft / 10;
+  if (obstacleGenerationInterval < 500) {
+    obstacleGenerationInterval = 500;
+  }
+  clearInterval(obstacleInterval);
+  obstacleInterval = setInterval(arguments.callee, obstacleGenerationInterval);
+}, 2000);
 
-  // Increase score every second
+
+  // Increase score every second and adjust speeds
   setInterval(function() {
     score++;
     scoreDisplay.innerHTML = "Score: " + score;
+    obstacleSpeed = 5 + Math.floor(score / 10);
+    characterSpeed = 5 + Math.floor(score / 10);
+    gameContainer.scrollLeft += characterSpeed;
   }, 1000);
+  
 }
 
 startGame();
