@@ -1,23 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" onclick="jump()">
 <head>
     <meta charset="UTF-8">
-  <title>Run and Jump</title>
-  <link rel="stylesheet" href="style.css">
+    <title>Jump an Go</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Run and Jump</h1>
-    <p>
-In this game the objective is simple, as the character runs across the screen press spacebar to jump and avoid obstacles and make it as far as you can! 
-    </p>
-  <div id="game-container">
-    <div id="score-display">Score: 0</div>
-    <div id="high-score-display">High Score: 0</div>
-
-    <div id="character"></div>
-    <div id="ground"></div>
-    <div id="obstacle-container"></div>
-  </div>
-  <script src="app.js"></script>
+    <div class="game">
+        <div id="character"></div>
+        <div id="block"></div>
+    </div>
+    <p>Score: <span id="scoreSpan"></span></p>
 </body>
+<script src="app.js"></script>
 </html>
