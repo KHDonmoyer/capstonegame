@@ -17,18 +17,16 @@ let obstacleContainer = document.getElementById("obstacle-container");
 
 // Start the game
 function startGame() {
-  // Move the character up and down
-  document.addEventListener("keydown", function(event) {
-    if (event.code === "ArrowUp" && !isJumping) {
-      isJumping = true;
-      character.classList.add("jump");
-      setTimeout(function() {
-        character.classList.remove("jump");
-        isJumping = false;
-      }, 500);
-    }
-    
-  });
+  // Move the character up
+  function addKeyEventListeners() {
+    document.addEventListener("keydown", function(event) {
+      if (event.code === "ArrowUp" && !isJumping) {
+        isJumping = true;
+        jump();
+   
+    });
+  }
+  
 
   // Start obstacle generation
   obstacleInterval = setInterval(function() {
@@ -61,13 +59,13 @@ function startGame() {
       }
     }, 10);
   // Adjust obstacle interval based on screen speed and score
-  let obstacleGenerationInterval = 2000 - score * 100 - gameContainer.scrollLeft / 10;
-  if (obstacleGenerationInterval < 500) {
-    obstacleGenerationInterval = 500;
-  }
-  clearInterval(obstacleInterval);
-  obstacleInterval = setInterval(arguments.callee, obstacleGenerationInterval);
-}, 2000);
+    let obstacleGenerationInterval = 2000 - score * 100 - gameContainer.scrollLeft / 10;
+    if (obstacleGenerationInterval < 500) {
+      obstacleGenerationInterval = 500;
+    }
+    clearInterval(obstacleInterval);
+    obstacleInterval = setInterval(arguments.callee, obstacleGenerationInterval);
+  }, 2000);
 
 
   // Increase score every second and adjust speeds
